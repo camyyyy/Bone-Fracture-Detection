@@ -8,10 +8,18 @@ import torchvision
 import torch
 
 from sidebar import Sidebar
-import rcnnres, vgg
+import rcnnres, vgg, alz_model
 # hide deprication warnings which directly don't affect the working of the application
 import warnings
 warnings.filterwarnings("ignore")
+
+
+import os  
+
+def get_asset_path(filename):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(current_dir, 'images', filename)
+
 
 
 
@@ -61,7 +69,7 @@ with tab1:
     )
    
    st.markdown("#### Network Architecture")
-   network_img = "images\\NN_Architecture_Updated.jpg"
+   network_img = get_asset_path('NN_Architecture_Updated.jpg')
    st.image(network_img, caption="Network Architecture", width=None, use_column_width=True)
    
    st.markdown("#### Models Used")
@@ -75,7 +83,7 @@ with tab1:
    st.text_area(
        "Decription",
        "This code implements a bone fracture detection system using the Fast R-CNN (Region-based Convolutional Neural Network) architecture. The purpose of Faster R-CNN (Region-based Convolutional Neural Network) is to perform efficient and accurate object detection within images. It addresses the challenge of localizing and classifying objects of interest in images, a fundamental task in computer vision applications. Faster R-CNN achieves this by introducing a Region Proposal Network (RPN) to generate candidate object bounding boxes, which are then refined and classified by subsequent network components. By combining region proposal generation and object detection into a single unified framework, Faster R-CNN significantly improves detection accuracy while maintaining computational efficiency, making it suitable for real-time applications such as autonomous driving, surveillance, medical imaging, and more. The dataset containing bone X-ray images is prepared, with images and their corresponding labels loaded and augmented to resize and transform boundary boxes. The Faster R-CNN model is then instantiated, with a pre-trained ResNet-50 backbone and a custom classification layer for bone fracture detection. The training loop is executed over multiple epochs, optimizing the model's parameters using the Adam optimizer and minimizing the combined loss. The best-performing model is saved, and its performance is evaluated on the validation set, with the best model further tested on a separate test set. After training, the model's ability to detect fractures is evaluated by comparing its predictions with the actual fractures. This helps us understand how accurate the model is in finding fractures. Also, a confusion matrix is created to see how well the model performs for different types of fractures, providing insights into its overall performance. By combining the power of ResNet's feature extraction capabilities with Faster R-CNN's precise object localization and classification, the system can effectively detect bone fractures within medical images with improved accuracy and reliability.",
-       height=45,
+       height=68,
     )
    
    st.markdown("##### SSD with VGG16")
@@ -90,7 +98,7 @@ with tab1:
    
    
 #weights 
-yolo_path ="weights\yolov8.pt"
+yolo_path = os.path.join("C:\\Users\\Remotlab\\Bone-Fracture-Detection\\weights\\yolov8.pt")
 
    
 with tab2:
@@ -261,6 +269,32 @@ with tab2:
                                     except Exception as ex:
                                         st.write("No image is uploaded yet!")
                                         st.write(ex)
+
+            elif model == 'CNN Alzheimer v1':
+                            cnn_model, device = alz_model.load_model()
+
+                            col1, col2 = st.columns(2)
+
+                            with col1:
+                                uploaded_image = PIL.Image.open(image)
+
+                                st.image(
+                                    image=image,
+                                    caption="Uploaded Brain Image",
+                                    use_column_width=True
+                                )
+
+                                if uploaded_image:
+                                    if st.button("Execution"):
+                                        with st.spinner("Running..."):
+                                            label, confidence = alz_model.predict(cnn_model, uploaded_image, device)
+
+                                            with col2:
+                                                st.image(uploaded_image, caption="Processed Image", use_column_width=True)
+                                                with st.expander("Prediction Results"):
+                                                    st.markdown(f"**Prediction:** {label}")
+                                                    st.markdown(f"**Confidence:** {confidence:.2f} %")
+
 
         
     else:
