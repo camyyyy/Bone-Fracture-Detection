@@ -1,0 +1,29 @@
+# Environnements virtuels
+venv/
+venv-tf/
+
+# Fichiers de modèle ou poids (PyTorch, TensorFlow, etc.)
+*.pt
+*.h5
+*.pkl
+
+# Librairies binaires trop lourdes
+*.dll
+*.lib
+*.pyd
+
+# Fichiers temporaires
+__pycache__/
+*.py[cod]
+*.so
+
+# Fichiers de logs
+*.log
+
+# Fichiers systèmes
+.DS_Store
+Thumbs.db
+
+# VSCode / PyCharm
+.vscode/
+.idea/
