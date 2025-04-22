@@ -37,7 +37,7 @@ def load_model():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = SimpleCNN(num_classes=len(class_names)).to(device)
 
-    weights_path = os.path.abspath("C:\\Users\\Remotlab\\Bone-Fracture-Detection\\weights\\Vbai-DPA 2.0.pt")  # adapte si le fichier est ailleurs
+    weights_path = os.path.abspath("C:\\Users\\Remotlab\\Bone-Fracture-Detection\\weights\\Vbai-DPA-2.0.pt")  # adapte si le fichier est ailleurs
     model.load_state_dict(torch.load(weights_path, map_location=device))
     model.eval()
     return model, device
